@@ -65,6 +65,25 @@ public class Bobby {
                 continue;
             }
 
+            if (input.startsWith("unmark ")) {
+                int index = parseTaskNumber(input.substring(7)) - 1;
+
+                if (index >= 0 && index < tasks.size()) {
+                    Task t = tasks.get(index);
+                    t.markAsNotDone();
+
+                    System.out.println(line);
+                    System.out.println(" OK, I've marked this task as not done yet:");
+                    System.out.println("   " + t);
+                    System.out.println(line);
+                } else {
+                    System.out.println(line);
+                    System.out.println(" Oops! That task number doesn't exist.");
+                    System.out.println(line);
+                }
+                continue;
+            }
+
             // echo command
             System.out.println(line);
             System.out.println(" added:" + " " + input);
