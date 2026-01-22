@@ -32,8 +32,9 @@ public class Bobby {
 
             // echo command
             System.out.println(line);
-            System.out.println(" " + input);
+            System.out.println("added:" + " " + input);
             System.out.println(line);
+
         }
 
         sc.close();
