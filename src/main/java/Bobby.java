@@ -2,6 +2,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Bobby {
+    private static int parseTaskNumber(String s) {
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
     public static void main(String[] args) {
         String logo = " ____   ___  ____  ____  __   __\n"
                     + "| __ ) / _ \\| __ )| __ ) \\ \\ / /\n"
@@ -36,6 +43,25 @@ public class Bobby {
                     System.out.println(" " + (i + 1) + "." + tasks.get(i));
                 }
                 System.out.println(line);
+                continue;
+            }
+
+            if (input.startsWith("mark ")) {
+                int index = parseTaskNumber(input.substring(5)) - 1;
+
+                if (index >= 0 && index < tasks.size()) {
+                    Task t = tasks.get(index);
+                    t.markAsDone();
+
+                    System.out.println(line);
+                    System.out.println(" Nice! I've marked this task as done:");
+                    System.out.println("   " + t);
+                    System.out.println(line);
+                } else {
+                    System.out.println(line);
+                    System.out.println(" Oops! That task number doesn't exist.");
+                    System.out.println(line);
+                }
                 continue;
             }
 
