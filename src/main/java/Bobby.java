@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Bobby {
     public static void main(String[] args) {
         String logo = " ____   ___  ____  ____  __   __\n"
@@ -15,5 +17,25 @@ public class Bobby {
         System.out.println(line);
         System.out.println(" Bye. Hope to see you again soon!");
         System.out.println(line);
+
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            String input = sc.nextLine();
+
+            if (input.equals("bye")) {
+                System.out.println(line);
+                System.out.println(" Bye. Hope to see you again soon!");
+                System.out.println(line);
+                break;
+            }
+
+            // echo command
+            System.out.println(line);
+            System.out.println(" " + input);
+            System.out.println(line);
+        }
+
+        sc.close();
     }
 }
