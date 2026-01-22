@@ -16,8 +16,6 @@ public class Bobby {
         System.out.println(" Hello! I'm Bobby");
         System.out.println(" What can I do for you?");
         System.out.println(line);
-        System.out.println(" Bye. Hope to see you again soon!");
-        System.out.println(line);
 
         Scanner sc = new Scanner(System.in);
         ArrayList<String> tasks = new ArrayList<>();
