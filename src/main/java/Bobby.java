@@ -18,7 +18,7 @@ public class Bobby {
         System.out.println(line);
 
         Scanner sc = new Scanner(System.in);
-        ArrayList<String> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = new ArrayList<>();
 
         while (true) {
             String input = sc.nextLine();
@@ -33,7 +33,7 @@ public class Bobby {
             if (input.equals("list")) {
                 System.out.println(line);
                 for (int i = 0; i < tasks.size(); i++) {
-                    System.out.println(" " + (i + 1) + ". " + tasks.get(i));
+                    System.out.println(" " + (i + 1) + "." + tasks.get(i));
                 }
                 System.out.println(line);
                 continue;
@@ -45,7 +45,8 @@ public class Bobby {
             System.out.println(line);
 
             //  add user command to tasks
-            tasks.add(input);
+            Task userTask = new Task(input);
+            tasks.add(userTask);
 
         }
 
