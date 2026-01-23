@@ -2,18 +2,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Bobby {
-    private static int parseTaskNumber(String s) {
+    private static int parseIndexOrThrow(String s, int size) throws BobbyException {
+        int num;
         try {
-            return Integer.parseInt(s.trim());
+            num = Integer.parseInt(s.trim());
         } catch (NumberFormatException e) {
-            return -1;
+            throw new BobbyException("Please give a valid task number. Example: mark 2");
         }
+        int index = num - 1;
+        if (index < 0 || index >= size) {
+            throw new BobbyException("That task number doesn't exist. Use 'list' to see the numbers.");
+        }
+        return index;
     }
 
     private static void printError(String line, String msg) {
-    System.out.println(line);
-    System.out.println(" " + msg);
-    System.out.println(line);
+        System.out.println(line);
+        System.out.println(" " + msg);
+        System.out.println(line);
     }
 
     public static void main(String[] args) {
@@ -37,26 +43,29 @@ public class Bobby {
         while (true) {
             String input = sc.nextLine();
 
-            if (input.equals("bye")) {
-                System.out.println(line);
-                System.out.println(" Bye. Hope to see you again soon!");
-                System.out.println(line);
-                break;
-            }
-
-            if (input.equals("list")) {
-                System.out.println(line);
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.println(" " + (i + 1) + "." + tasks.get(i));
+            try {
+                if (input.equals("bye")) {
+                    System.out.println(line);
+                    System.out.println(" Bye. Hope to see you again soon!");
+                    System.out.println(line);
+                    break;
                 }
-                System.out.println(line);
-                continue;
-            }
 
-            if (input.startsWith("mark ")) {
-                int index = parseTaskNumber(input.substring(5)) - 1;
+                if (input.equals("list")) {
+                    System.out.println(line);
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println(" " + (i + 1) + "." + tasks.get(i));
+                    }
+                    System.out.println(line);
+                    continue;
+                }
 
-                if (index >= 0 && index < tasks.size()) {
+                if (input.startsWith("mark")) {
+                    String[] parts = input.split("\\s+");
+                    if (parts.length < 2) {
+                        throw new BobbyException("Please specify which task to mark. Example: mark 2");
+                    }
+                    int index = parseIndexOrThrow(parts[1], tasks.size());
                     Task t = tasks.get(index);
                     t.markAsDone();
 
@@ -64,18 +73,15 @@ public class Bobby {
                     System.out.println(" Nice! I've marked this task as done:");
                     System.out.println("   " + t);
                     System.out.println(line);
-                } else {
-                    System.out.println(line);
-                    System.out.println(" Oops! That task number doesn't exist.");
-                    System.out.println(line);
+                    continue;
                 }
-                continue;
-            }
 
-            if (input.startsWith("unmark ")) {
-                int index = parseTaskNumber(input.substring(7)) - 1;
-
-                if (index >= 0 && index < tasks.size()) {
+                if (input.startsWith("unmark")) {
+                    String[] parts = input.split("\\s+");
+                    if (parts.length < 2) {
+                        throw new BobbyException("Please specify which task to unmark. Example: unmark 2");
+                    }
+                    int index = parseIndexOrThrow(parts[1], tasks.size());
                     Task t = tasks.get(index);
                     t.markAsNotDone();
 
@@ -83,96 +89,99 @@ public class Bobby {
                     System.out.println(" OK, I've marked this task as not done yet:");
                     System.out.println("   " + t);
                     System.out.println(line);
-                } else {
-                    System.out.println(line);
-                    System.out.println(" Oops! That task number doesn't exist.");
-                    System.out.println(line);
+                    continue;
                 }
-                continue;
-            }
 
-            if (input.startsWith("todo ")) {
-                String desc = input.substring(5).trim();
-                Task t = new Todo(desc);
-                tasks.add(t);
 
-                System.out.println(line);
-                System.out.println(" Got it. I've added this task:");
-                System.out.println("   " + t);
-                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-                System.out.println(line);
-                continue;
-            }
+                if (input.startsWith("todo")) {
+                    if (input.equals("todo")) {
+                        throw new BobbyException("The description of a todo cannot be empty.");
+                    }
+                    String desc = input.substring(4).trim();
+                    if (desc.isEmpty()) {
+                        throw new BobbyException("The description of a todo cannot be empty.");
+                    }
 
-            if (input.startsWith("deadline ")) {
-                String rest = input.substring(9).trim();
-                String[] parts = rest.split(" /by ", 2);
+                    Task t = new Todo(desc);
+                    tasks.add(t);
 
-                if (parts.length < 2) {
                     System.out.println(line);
-                    System.out.println(" Oops! Use: deadline <description> /by <by>");
+                    System.out.println(" Got it. I've added this task:");
+                    System.out.println("   " + t);
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                     System.out.println(line);
                     continue;
                 }
 
-                String desc = parts[0].trim();
-                String by = parts[1].trim();
+                
+                if (input.startsWith("deadline")) {
+                    if (input.equals("deadline")) {
+                        throw new BobbyException("The description of a deadline cannot be empty.");
+                    }
+                    String rest = input.substring(8).trim();
+                    String[] parts = rest.split(" /by ", 2);
+                    if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+                        throw new BobbyException("Use: deadline <description> /by <by>");
+                    }
 
-                Task t = new Deadline(desc, by);
-                tasks.add(t);
+                    String desc = parts[0].trim();
+                    String by = parts[1].trim();
 
-                System.out.println(line);
-                System.out.println(" Got it. I've added this task:");
-                System.out.println("   " + t);
-                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
-                System.out.println(line);
-                continue;
-            }
+                    Task t = new Deadline(desc, by);
+                    tasks.add(t);
 
-            if (input.startsWith("event ")) {
-                String rest = input.substring(6).trim();
-
-                String[] fromSplit = rest.split(" /from ", 2);
-                if (fromSplit.length < 2) {
                     System.out.println(line);
-                    System.out.println(" Oops! Use: event <description> /from <from> /to <to>");
-                    System.out.println(line);
-                    continue;
-                }
-
-                String desc = fromSplit[0].trim();
-                String[] toSplit = fromSplit[1].split(" /to ", 2);
-
-                if (toSplit.length < 2) {
-                    System.out.println(line);
-                    System.out.println(" Oops! Use: event <description> /from <from> /to <to>");
+                    System.out.println(" Got it. I've added this task:");
+                    System.out.println("   " + t);
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
                     System.out.println(line);
                     continue;
                 }
 
-                String from = toSplit[0].trim();
-                String to = toSplit[1].trim();
+                if (input.startsWith("event")) {
+                    if (input.equals("event")) {
+                        throw new BobbyException("The description of an event cannot be empty.");
+                    }
+                    String rest = input.substring(5).trim();
+                    String[] fromSplit = rest.split(" /from ", 2);
+                    if (fromSplit.length < 2 || fromSplit[0].trim().isEmpty()) {
+                        throw new BobbyException("Use: event <description> /from <from> /to <to>");
+                    }
 
-                Task t = new Event(desc, from, to);
-                tasks.add(t);
+                    String desc = fromSplit[0].trim();
+                    String[] toSplit = fromSplit[1].split(" /to ", 2);
+                    if (toSplit.length < 2 || toSplit[0].trim().isEmpty() || toSplit[1].trim().isEmpty()) {
+                        throw new BobbyException("Use: event <description> /from <from> /to <to>");
+                    }
 
+                    String from = toSplit[0].trim();
+                    String to = toSplit[1].trim();
+
+                    Task t = new Event(desc, from, to);
+                    tasks.add(t);
+
+                    System.out.println(line);
+                    System.out.println(" Got it. I've added this task:");
+                    System.out.println("   " + t);
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                    System.out.println(line);
+                    continue;
+                }
+
+                // echo command
                 System.out.println(line);
-                System.out.println(" Got it. I've added this task:");
-                System.out.println("   " + t);
-                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                System.out.println(" added:" + " " + input);
                 System.out.println(line);
-                continue;
+
+                //  add user command to tasks
+                Task userTask = new Task(input);
+                tasks.add(userTask);
+
+                throw new BobbyException("I'm sorry, but I that is an invalid command!");
+            
+            } catch (BobbyException e) {
+                printError(line, e.getMessage());
             }
-
-            // echo command
-            System.out.println(line);
-            System.out.println(" added:" + " " + input);
-            System.out.println(line);
-
-            //  add user command to tasks
-            Task userTask = new Task(input);
-            tasks.add(userTask);
-
         }
 
         sc.close();
