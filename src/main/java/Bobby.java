@@ -92,6 +92,22 @@ public class Bobby {
                     continue;
                 }
 
+                if (input.startsWith("delete")) {
+                    String[] parts = input.split("\\s+");
+                    if (parts.length < 2) {
+                        throw new BobbyException("Please specify which task to delete. Example: delete 2");
+                    }
+
+                    int index = parseIndexOrThrow(parts[1], tasks.size());
+                    Task removed = tasks.remove(index);
+
+                    System.out.println(line);
+                    System.out.println(" Noted. I've removed this task:");
+                    System.out.println("   " + removed);
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                    System.out.println(line);
+                    continue;
+                }
 
                 if (input.startsWith("todo")) {
                     if (input.equals("todo")) {
