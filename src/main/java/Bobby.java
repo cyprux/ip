@@ -168,15 +168,6 @@ public class Bobby {
                     continue;
                 }
 
-                // echo command
-                System.out.println(line);
-                System.out.println(" added:" + " " + input);
-                System.out.println(line);
-
-                //  add user command to tasks
-                Task userTask = new Task(input);
-                tasks.add(userTask);
-
                 throw new BobbyException("I'm sorry, but I that is an invalid command!");
             
             } catch (BobbyException e) {
