@@ -97,6 +97,31 @@ public class Bobby {
                 continue;
             }
 
+            if (input.startsWith("deadline ")) {
+                String rest = input.substring(9).trim();
+                String[] parts = rest.split(" /by ", 2);
+
+                if (parts.length < 2) {
+                    System.out.println(line);
+                    System.out.println(" Oops! Use: deadline <description> /by <by>");
+                    System.out.println(line);
+                    continue;
+                }
+
+                String desc = parts[0].trim();
+                String by = parts[1].trim();
+
+                Task t = new Deadline(desc, by);
+                tasks.add(t);
+
+                System.out.println(line);
+                System.out.println(" Got it. I've added this task:");
+                System.out.println("   " + t);
+                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                System.out.println(line);
+                continue;
+            }
+
             // echo command
             System.out.println(line);
             System.out.println(" added:" + " " + input);
