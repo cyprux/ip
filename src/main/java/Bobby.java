@@ -9,6 +9,13 @@ public class Bobby {
             return -1;
         }
     }
+
+    private static void printError(String line, String msg) {
+    System.out.println(line);
+    System.out.println(" " + msg);
+    System.out.println(line);
+    }
+
     public static void main(String[] args) {
         String logo = " ____   ___  ____  ____  __   __\n"
                     + "| __ ) / _ \\| __ )| __ ) \\ \\ / /\n"
