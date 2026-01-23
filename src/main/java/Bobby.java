@@ -122,6 +122,41 @@ public class Bobby {
                 continue;
             }
 
+            if (input.startsWith("event ")) {
+                String rest = input.substring(6).trim();
+
+                String[] fromSplit = rest.split(" /from ", 2);
+                if (fromSplit.length < 2) {
+                    System.out.println(line);
+                    System.out.println(" Oops! Use: event <description> /from <from> /to <to>");
+                    System.out.println(line);
+                    continue;
+                }
+
+                String desc = fromSplit[0].trim();
+                String[] toSplit = fromSplit[1].split(" /to ", 2);
+
+                if (toSplit.length < 2) {
+                    System.out.println(line);
+                    System.out.println(" Oops! Use: event <description> /from <from> /to <to>");
+                    System.out.println(line);
+                    continue;
+                }
+
+                String from = toSplit[0].trim();
+                String to = toSplit[1].trim();
+
+                Task t = new Event(desc, from, to);
+                tasks.add(t);
+
+                System.out.println(line);
+                System.out.println(" Got it. I've added this task:");
+                System.out.println("   " + t);
+                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                System.out.println(line);
+                continue;
+            }
+
             // echo command
             System.out.println(line);
             System.out.println(" added:" + " " + input);
