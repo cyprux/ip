@@ -84,6 +84,19 @@ public class Bobby {
                 continue;
             }
 
+            if (input.startsWith("todo ")) {
+                String desc = input.substring(5).trim();
+                Task t = new Todo(desc);
+                tasks.add(t);
+
+                System.out.println(line);
+                System.out.println(" Got it. I've added this task:");
+                System.out.println("   " + t);
+                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                System.out.println(line);
+                continue;
+            }
+
             // echo command
             System.out.println(line);
             System.out.println(" added:" + " " + input);
