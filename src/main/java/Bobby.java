@@ -38,7 +38,13 @@ public class Bobby {
         System.out.println(line);
 
         Scanner sc = new Scanner(System.in);
-        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Task> tasks;
+        try {
+            tasks = Storage.loadTasks();
+        } catch (BobbyException e) {
+            tasks = new ArrayList<>();
+            printError(line, e.getMessage());
+        }
 
         while (true) {
             String input = sc.nextLine();
@@ -68,6 +74,7 @@ public class Bobby {
                     int index = parseIndexOrThrow(parts[1], tasks.size());
                     Task t = tasks.get(index);
                     t.markAsDone();
+                    Storage.saveTasks(tasks);
 
                     System.out.println(line);
                     System.out.println(" Nice! I've marked this task as done:");
@@ -84,6 +91,7 @@ public class Bobby {
                     int index = parseIndexOrThrow(parts[1], tasks.size());
                     Task t = tasks.get(index);
                     t.markAsNotDone();
+                    Storage.saveTasks(tasks);
 
                     System.out.println(line);
                     System.out.println(" OK, I've marked this task as not done yet:");
@@ -100,6 +108,7 @@ public class Bobby {
 
                     int index = parseIndexOrThrow(parts[1], tasks.size());
                     Task removed = tasks.remove(index);
+                    Storage.saveTasks(tasks);
 
                     System.out.println(line);
                     System.out.println(" Noted. I've removed this task:");
@@ -120,6 +129,7 @@ public class Bobby {
 
                     Task t = new Todo(desc);
                     tasks.add(t);
+                    Storage.saveTasks(tasks);
 
                     System.out.println(line);
                     System.out.println(" Got it. I've added this task:");
@@ -145,6 +155,7 @@ public class Bobby {
 
                     Task t = new Deadline(desc, by);
                     tasks.add(t);
+                    Storage.saveTasks(tasks);
 
                     System.out.println(line);
                     System.out.println(" Got it. I've added this task:");
@@ -175,6 +186,7 @@ public class Bobby {
 
                     Task t = new Event(desc, from, to);
                     tasks.add(t);
+                    Storage.saveTasks(tasks);
 
                     System.out.println(line);
                     System.out.println(" Got it. I've added this task:");
