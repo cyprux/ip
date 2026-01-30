@@ -8,6 +8,13 @@ public class Task {
         this.isDone = false;
         this.type = type;
     }
+
+    public Task(String description, TaskType type, boolean isDone) {
+        this.description = description;
+        this.isDone = isDone;
+        this.type = type;
+    }
+    
     public String getStatusIcon() {
         return isDone ? "X" : " ";
     }
@@ -20,8 +27,20 @@ public class Task {
         isDone = false;
     }
 
+    public void setDone(boolean done) {
+        isDone = done;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public TaskType getType() {
+        return type;
     }
 
     @Override
