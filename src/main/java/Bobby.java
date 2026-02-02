@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -138,7 +139,6 @@ public class Bobby {
                     System.out.println(line);
                     continue;
                 }
-
                 
                 if (input.startsWith("deadline")) {
                     if (input.equals("deadline")) {
@@ -151,7 +151,7 @@ public class Bobby {
                     }
 
                     String desc = parts[0].trim();
-                    String by = parts[1].trim();
+                    LocalDate by = DateTimeUtil.parseDate(parts[1].trim());
 
                     Task t = new Deadline(desc, by);
                     tasks.add(t);
@@ -181,8 +181,8 @@ public class Bobby {
                         throw new BobbyException("Use: event <description> /from <from> /to <to>");
                     }
 
-                    String from = toSplit[0].trim();
-                    String to = toSplit[1].trim();
+                    LocalDate from = DateTimeUtil.parseDate(toSplit[0].trim());
+                    LocalDate to = DateTimeUtil.parseDate(toSplit[1].trim());
 
                     Task t = new Event(desc, from, to);
                     tasks.add(t);
