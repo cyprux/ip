@@ -13,6 +13,9 @@ src/main/resources/docs/
 *.iml
 bin/
 
+#Vs code settings
+.vscode/
+
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
 /data/bobby.txt
