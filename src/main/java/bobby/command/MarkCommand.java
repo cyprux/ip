@@ -1,7 +1,15 @@
-public class UnmarkCommand extends Command {
+package bobby.command;
+
+import bobby.ui.Ui;
+import bobby.task.Task;
+import bobby.task.TaskList;
+import bobby.exception.BobbyException;
+import bobby.storage.Storage;
+
+public class MarkCommand extends Command {
     private final int index;
 
-    public UnmarkCommand(int index) {
+    public MarkCommand(int index) {
         this.index = index;
     }
 
@@ -9,9 +17,9 @@ public class UnmarkCommand extends Command {
     public void execute(TaskList tasks, Ui ui, Storage storage) throws BobbyException {
         ensureIndexInRange(index, tasks.size());
         Task t = tasks.get(index);
-        t.markAsNotDone();
+        t.markAsDone();
         storage.save(tasks);
-        ui.showTaskUnmarked(t);
+        ui.showTaskMarked(t);
     }
 
     private static void ensureIndexInRange(int index, int size) throws BobbyException {

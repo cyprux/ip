@@ -1,4 +1,13 @@
+package bobby;
 import java.util.ArrayList;
+
+import bobby.command.Command;
+import bobby.exception.BobbyException;
+import bobby.parser.Parser;
+import bobby.storage.Storage;
+import bobby.task.Task;
+import bobby.task.TaskList;
+import bobby.ui.Ui;
 
 public class Bobby {
     private final Storage storage;

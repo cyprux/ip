@@ -1,4 +1,12 @@
+package bobby.command;
+
 import java.time.LocalDate;
+import bobby.ui.Ui;
+import bobby.task.Task;
+import bobby.task.TaskList;
+import bobby.task.Deadline;
+import bobby.exception.BobbyException;
+import bobby.storage.Storage;
 
 public class AddDeadlineCommand extends Command {
     private final String description;

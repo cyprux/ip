@@ -1,16 +1,25 @@
-public class DeleteCommand extends Command {
+package bobby.command;
+
+import bobby.ui.Ui;
+import bobby.task.Task;
+import bobby.task.TaskList;
+import bobby.exception.BobbyException;
+import bobby.storage.Storage;
+
+public class UnmarkCommand extends Command {
     private final int index;
 
-    public DeleteCommand(int index) {
+    public UnmarkCommand(int index) {
         this.index = index;
     }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws BobbyException {
         ensureIndexInRange(index, tasks.size());
-        Task removed = tasks.delete(index);
+        Task t = tasks.get(index);
+        t.markAsNotDone();
         storage.save(tasks);
-        ui.showTaskDeleted(removed, tasks.size());
+        ui.showTaskUnmarked(t);
     }
 
     private static void ensureIndexInRange(int index, int size) throws BobbyException {

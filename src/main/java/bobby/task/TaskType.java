@@ -1,3 +1,4 @@
+package bobby.task;
 public enum TaskType {
     TODO("T"),
     DEADLINE("D"),

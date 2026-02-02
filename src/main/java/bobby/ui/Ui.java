@@ -1,4 +1,8 @@
+package bobby.ui;
 import java.util.Scanner;
+
+import bobby.task.Task;
+import bobby.task.TaskList;
 
 public class Ui {
     private static final String LINE = "____________________________________________________________";
