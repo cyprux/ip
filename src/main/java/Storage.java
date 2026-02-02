@@ -7,25 +7,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
-    private static final Path DATA_DIR = Paths.get("data");
-    private static final Path FILE_PATH = DATA_DIR.resolve("bobby.txt");
+    private final Path filePath;
 
-    public static ArrayList<Task> loadTasks() throws BobbyException {
+    public Storage(String filePath) {
+        this.filePath = Paths.get(filePath);
+    }
+
+    public ArrayList<Task> load() throws BobbyException {
         ArrayList<Task> tasks = new ArrayList<>();
 
-        // First run: no folder/file yet -> return empty list
-        if (!Files.exists(FILE_PATH)) {
+        if (!Files.exists(filePath)) {
             return tasks;
         }
 
         try {
-            List<String> lines = Files.readAllLines(FILE_PATH);
-            for (String rawLine : lines) {
-                String line = rawLine.trim();
-                if (line.isEmpty()) {
-                    continue;
+            List<String> lines = Files.readAllLines(filePath);
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i).trim();
+                if (!line.isEmpty()) {
+                    tasks.add(parseLine(line));
                 }
-                tasks.add(parseLine(line));
             }
             return tasks;
         } catch (IOException e) {
@@ -33,27 +34,26 @@ public class Storage {
         }
     }
 
-    public static void saveTasks(ArrayList<Task> tasks) throws BobbyException {
+    public void save(TaskList taskList) throws BobbyException {
         try {
-            // Ensure ./data exists
-            Files.createDirectories(DATA_DIR);
-
-            ArrayList<String> out = new ArrayList<>();
-            for (Task t : tasks) {
-                out.add(toStorageString(t));
+            Path parent = filePath.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
             }
 
-            Files.write(FILE_PATH, out);
+            ArrayList<String> out = new ArrayList<>();
+            ArrayList<Task> tasks = taskList.asUnmodifiableList();
+            for (int i = 0; i < tasks.size(); i++) {
+                out.add(toStorageString(tasks.get(i)));
+            }
+
+            Files.write(filePath, out);
         } catch (IOException e) {
             throw new BobbyException("Could not save tasks to disk.");
         }
     }
 
-    private static Task parseLine(String line) throws BobbyException {
-        // Expected formats:
-        // T | 1 | read book
-        // D | 0 | return book | June 6th
-        // E | 0 | meeting | Aug 6th 2-4pm | Aug 6th 4-6pm
+    private Task parseLine(String line) throws BobbyException {
         String[] parts = line.split("\\s*\\|\\s*");
         if (parts.length < 3) {
             throw new BobbyException("Corrupted save file line: " + line);
@@ -87,7 +87,7 @@ public class Storage {
         throw new BobbyException("Unknown task type in save file: " + typeIcon);
     }
 
-    private static String toStorageString(Task t) throws BobbyException {
+    private String toStorageString(Task t) throws BobbyException {
         String done = t.isDone() ? "1" : "0";
         String type = t.getType().getIcon();
         String desc = t.getDescription();
