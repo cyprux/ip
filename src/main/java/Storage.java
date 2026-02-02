@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class Storage {
             if (parts.length < 4) {
                 throw new BobbyException("Corrupted deadline line: " + line);
             }
-            String by = parts[3].trim();
+            LocalDate by = DateTimeUtil.parseDate(parts[3].trim());
             return new Deadline(desc, by, isDone);
         }
 
@@ -78,8 +79,8 @@ public class Storage {
             if (parts.length < 5) {
                 throw new BobbyException("Corrupted event line: " + line);
             }
-            String from = parts[3].trim();
-            String to = parts[4].trim();
+            LocalDate from = DateTimeUtil.parseDate(parts[3].trim());
+            LocalDate to = DateTimeUtil.parseDate(parts[4].trim());
             return new Event(desc, from, to, isDone);
         }
 
