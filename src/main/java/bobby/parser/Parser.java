@@ -1,4 +1,5 @@
 package bobby.parser;
+
 import java.time.LocalDate;
 
 import bobby.command.AddDeadlineCommand;
@@ -13,7 +14,20 @@ import bobby.command.UnmarkCommand;
 import bobby.exception.BobbyException;
 import bobby.util.DateTimeUtil;
 
+/**
+ * Parses raw user input strings into corresponding Command objects.
+ * This class interprets the user's text commands and converts them into
+ * executable command instances used by the application.
+ */
 public class Parser {
+
+    /**
+     * Parses a full command string and returns the corresponding Command.
+     *
+     * @param fullCommand The raw input string entered by the user.
+     * @return A Command object representing the user's request.
+     * @throws BobbyException If the input is invalid or improperly formatted.
+     */
     public static Command parse(String fullCommand) throws BobbyException {
         String input = fullCommand.trim();
         if (input.isEmpty()) {
@@ -75,9 +89,16 @@ public class Parser {
             return new AddEventCommand(desc, from, to);
         }
 
-        throw new BobbyException("I'm sorry, but I that is an invalid command!");
+        throw new BobbyException("I'm sorry, but that is an invalid command!");
     }
 
+    /**
+     * Converts a user-provided 1-based task index into a 0-based index.
+     *
+     * @param raw The raw index string from user input.
+     * @return The 0-based integer index.
+     * @throws BobbyException If the input is not a valid integer.
+     */
     private static int parseOneBasedIndex(String raw) throws BobbyException {
         try {
             return Integer.parseInt(raw.trim()) - 1;
