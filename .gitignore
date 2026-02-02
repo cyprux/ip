@@ -16,6 +16,11 @@ bin/
 #Vs code settings
 .vscode/
 
+#Text file to ignore
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
-/data/bobby.txt
+bobby.txt
+
+#Jar file to ignore
+build/
+*.jar
