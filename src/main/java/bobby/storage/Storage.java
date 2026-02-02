@@ -1,4 +1,5 @@
 package bobby.storage;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,13 +16,28 @@ import bobby.task.TaskList;
 import bobby.task.Todo;
 import bobby.util.DateTimeUtil;
 
+/**
+ * Handles loading tasks from and saving tasks to persistent storage.
+ * Tasks are stored in a text file using a simple structured format.
+ */
 public class Storage {
     private final Path filePath;
 
+    /**
+     * Constructs a Storage object with the given file path.
+     *
+     * @param filePath The path to the file used for saving and loading tasks.
+     */
     public Storage(String filePath) {
         this.filePath = Paths.get(filePath);
     }
 
+    /**
+     * Loads tasks from the storage file.
+     *
+     * @return An ArrayList of Task objects loaded from the file.
+     * @throws BobbyException If the file cannot be read or contains corrupted data.
+     */
     public ArrayList<Task> load() throws BobbyException {
         ArrayList<Task> tasks = new ArrayList<>();
 
@@ -43,6 +59,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves the given task list to the storage file.
+     *
+     * @param taskList The TaskList to be saved.
+     * @throws BobbyException If the tasks cannot be written to disk.
+     */
     public void save(TaskList taskList) throws BobbyException {
         try {
             Path parent = filePath.getParent();
@@ -62,6 +84,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Parses a single line from the storage file into a Task object.
+     *
+     * @param line The line to parse.
+     * @return The corresponding Task object.
+     * @throws BobbyException If the line format is invalid or corrupted.
+     */
     private Task parseLine(String line) throws BobbyException {
         String[] parts = line.split("\\s*\\|\\s*");
         if (parts.length < 3) {
@@ -96,6 +125,13 @@ public class Storage {
         throw new BobbyException("Unknown task type in save file: " + typeIcon);
     }
 
+    /**
+     * Converts a Task object into its storage string representation.
+     *
+     * @param t The Task to convert.
+     * @return The formatted string used for storage.
+     * @throws BobbyException If the task type is unknown.
+     */
     private String toStorageString(Task t) throws BobbyException {
         String done = t.isDone() ? "1" : "0";
         String type = t.getType().getIcon();
