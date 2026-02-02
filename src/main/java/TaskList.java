@@ -33,11 +33,14 @@ public class TaskList {
 
     public String formatForDisplay() {
         if (tasks.isEmpty()) {
-            return "  (no tasks yet)";
+            return "No tasks yet!";
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
-            sb.append(" ").append(i + 1).append(".").append(tasks.get(i)).append("\n");
+            sb.append(i + 1)
+            .append(". ")
+            .append(tasks.get(i))
+            .append("\n");
         }
         return sb.toString().trim();
     }
