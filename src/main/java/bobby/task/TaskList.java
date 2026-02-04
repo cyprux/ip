@@ -1,6 +1,7 @@
 package bobby.task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a list of tasks managed by the Bobby application.
@@ -71,6 +72,29 @@ public class TaskList {
      */
     public ArrayList<Task> asUnmodifiableList() {
         return new ArrayList<>(tasks);
+    }
+
+    /**
+     * Returns tasks whose descriptions contain the given keyword (case-insensitive).
+     *
+     * @param keyword Keyword to search for.
+     * @return List of matching tasks. Empty list if none match.
+     */
+    public List<Task> findByKeyword(String keyword) {
+        assert keyword != null : "keyword should not be null";
+
+        String needle = keyword.trim().toLowerCase();
+        List<Task> matches = new ArrayList<>();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            String haystack = task.getDescription().toLowerCase();
+            if (haystack.contains(needle)) {
+                matches.add(task);
+            }
+        }
+
+        return matches;
     }
 
     /**
