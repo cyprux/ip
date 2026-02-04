@@ -7,6 +7,7 @@ import bobby.command.AddTodoCommand;
 import bobby.command.Command;
 import bobby.command.DeleteCommand;
 import bobby.command.ExitCommand;
+import bobby.command.FindTaskCommand;
 import bobby.command.ListCommand;
 import bobby.command.MarkCommand;
 import bobby.command.UnmarkCommand;
@@ -75,7 +76,15 @@ public class Parser {
             return new AddEventCommand(desc, from, to);
         }
 
-        throw new BobbyException("I'm sorry, but I that is an invalid command!");
+        if (input.startsWith("find")) {
+            String keyword = input.substring(4).trim();
+            if (keyword.isEmpty()) {
+                throw new BobbyException("Please provide a keyword to find. Example: find book");
+            }
+            return new FindTaskCommand(keyword);
+        }
+
+        throw new BobbyException("I'm sorry, but that is an invalid command!");
     }
 
     private static int parseOneBasedIndex(String raw) throws BobbyException {
@@ -85,4 +94,5 @@ public class Parser {
             throw new BobbyException("Please give a valid task number. Example: mark 2");
         }
     }
+    
 }

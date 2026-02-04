@@ -1,4 +1,6 @@
 package bobby.ui;
+
+import java.util.List;
 import java.util.Scanner;
 
 import bobby.task.Task;
@@ -70,5 +72,27 @@ public class Ui {
     public void showTaskUnmarked(Task task) {
         System.out.println(" OK, I've marked this task as not done yet:");
         System.out.println("   " + task);
+    }
+
+     /**
+     * Shows the list of tasks that match a find query.
+     *
+     * @param matches Matching tasks.
+     */
+    public void showFoundTasks(List<Task> matches) {
+        showLine();
+
+        if (matches.isEmpty()) {
+            System.out.println(" No matching tasks found.");
+            showLine();
+            return;
+        }
+
+        System.out.println(" Here are the matching tasks in your list:");
+        for (int i = 0; i < matches.size(); i++) {
+            System.out.println(" " + (i + 1) + "." + matches.get(i));
+        }
+
+        showLine();
     }
 }
