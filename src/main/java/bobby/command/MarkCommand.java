@@ -1,10 +1,10 @@
 package bobby.command;
 
-import bobby.ui.Ui;
-import bobby.task.Task;
-import bobby.task.TaskList;
 import bobby.exception.BobbyException;
 import bobby.storage.Storage;
+import bobby.task.Task;
+import bobby.task.TaskList;
+import bobby.ui.Ui;
 
 public class MarkCommand extends Command {
     private final int index;
