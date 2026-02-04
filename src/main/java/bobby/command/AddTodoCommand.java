@@ -1,11 +1,7 @@
 package bobby.command;
 
-<<<<<<< HEAD
-import bobby.ui.Ui;
-=======
 import bobby.exception.BobbyException;
 import bobby.storage.Storage;
->>>>>>> branch-A-CodingStandard
 import bobby.task.Task;
 import bobby.task.TaskList;
 import bobby.task.Todo;
