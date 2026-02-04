@@ -1,8 +1,8 @@
 package bobby.command;
 
-import bobby.ui.Ui;
-import bobby.task.TaskList;
 import bobby.storage.Storage;
+import bobby.task.TaskList;
+import bobby.ui.Ui;
 
 /**
  * Represents a command that displays all tasks currently stored

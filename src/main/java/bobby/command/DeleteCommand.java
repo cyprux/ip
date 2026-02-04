@@ -1,10 +1,10 @@
 package bobby.command;
 
-import bobby.ui.Ui;
-import bobby.task.Task;
-import bobby.task.TaskList;
 import bobby.exception.BobbyException;
 import bobby.storage.Storage;
+import bobby.task.Task;
+import bobby.task.TaskList;
+import bobby.ui.Ui;
 
 /**
  * Represents a command that deletes a task from the task list
