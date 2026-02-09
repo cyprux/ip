@@ -67,6 +67,23 @@ public class Bobby {
         }
     }
 
+    public String getWelcomeMessage() {
+        return " Hello! I'm Bobby\n What can I do for you?";
+    }
+
+    public String getResponse(String input) {
+        bobby.ui.GuiUi guiUi = new bobby.ui.GuiUi();
+
+        try {
+            bobby.command.Command command = bobby.parser.Parser.parse(input);
+            command.execute(tasks, guiUi, storage);
+            return guiUi.getOutput();
+        } catch (bobby.exception.BobbyException e) {
+            guiUi.showError(e.getMessage());
+            return guiUi.getOutput();
+        }
+    }
+
     /**
      * The entry point of the Bobby application.
      *
