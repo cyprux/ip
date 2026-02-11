@@ -40,24 +40,31 @@ public class Storage {
      * @throws BobbyException If the file cannot be read or contains corrupted data.
      */
     public ArrayList<Task> load() throws BobbyException {
-        ArrayList<Task> tasks = new ArrayList<>();
-
         if (!Files.exists(filePath)) {
-            return tasks;
+            return new ArrayList<>();
         }
 
         try {
-            List<String> lines = Files.readAllLines(filePath);
-            for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i).trim();
-                if (!line.isEmpty()) {
-                    tasks.add(parseLine(line));
-                }
-            }
-            return tasks;
+            List<String> lines = readAllLines();
+            return parseTasks(lines);
         } catch (IOException e) {
             throw new BobbyException("Could not read saved tasks from disk.");
         }
+    }
+
+    private List<String> readAllLines() throws IOException {
+        return Files.readAllLines(filePath);
+    }
+
+    private ArrayList<Task> parseTasks(List<String> lines) throws BobbyException {
+        ArrayList<Task> tasks = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i).trim();
+            if (!line.isEmpty()) {
+                tasks.add(parseLine(line));
+            }
+        }
+        return tasks;
     }
 
     /**
