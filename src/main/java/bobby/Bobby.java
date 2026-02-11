@@ -52,18 +52,25 @@ public class Bobby {
 
         boolean isExit = false;
         while (!isExit) {
-            try {
-                String fullCommand = ui.readCommand();
-                ui.showLine();
+            String fullCommand = ui.readCommand();
+            ui.showLine();
 
-                Command command = Parser.parse(fullCommand);
-                command.execute(tasks, ui, storage);
-                isExit = command.isExit();
-            } catch (BobbyException e) {
-                ui.showError(e.getMessage());
-            } finally {
-                ui.showLine();
-            }
+            isExit = processInput(fullCommand, ui);
+
+            ui.showLine();
+        }
+    }
+
+    private boolean processInput(String input, Ui ui) {
+        assert ui != null : "UI should not be null";
+
+        try {
+            Command command = Parser.parse(input);
+            command.execute(tasks, ui, storage);
+            return command.isExit();
+        } catch (BobbyException e) {
+            ui.showError(e.getMessage());
+            return false;
         }
     }
 
@@ -73,15 +80,8 @@ public class Bobby {
 
     public String getResponse(String input) {
         bobby.ui.GuiUi guiUi = new bobby.ui.GuiUi();
-
-        try {
-            bobby.command.Command command = bobby.parser.Parser.parse(input);
-            command.execute(tasks, guiUi, storage);
-            return guiUi.getOutput();
-        } catch (bobby.exception.BobbyException e) {
-            guiUi.showError(e.getMessage());
-            return guiUi.getOutput();
-        }
+        processInput(input, guiUi);
+        return guiUi.getOutput();
     }
 
     /**
