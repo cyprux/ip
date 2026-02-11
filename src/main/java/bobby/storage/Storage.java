@@ -29,6 +29,7 @@ public class Storage {
      * @param filePath The path to the file used for saving and loading tasks.
      */
     public Storage(String filePath) {
+        assert filePath != null : "Storage file path should not be null";
         this.filePath = Paths.get(filePath);
     }
 
@@ -66,6 +67,8 @@ public class Storage {
      * @throws BobbyException If the tasks cannot be written to disk.
      */
     public void save(TaskList taskList) throws BobbyException {
+        assert taskList != null : "TaskList to save should not be null";
+
         try {
             Path parent = filePath.getParent();
             if (parent != null) {
