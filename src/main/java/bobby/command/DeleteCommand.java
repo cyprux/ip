@@ -36,6 +36,8 @@ public class DeleteCommand extends Command {
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws BobbyException {
         ensureIndexInRange(index, tasks.size());
+        assert index >= 0 && index < tasks.size() : "Index should be valid after range check";
+        
         Task removed = tasks.delete(index);
         storage.save(tasks);
         ui.showTaskDeleted(removed, tasks.size());
