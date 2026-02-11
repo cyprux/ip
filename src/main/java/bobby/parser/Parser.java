@@ -71,9 +71,9 @@ public class Parser {
             throw new BobbyException(MESSAGE_EMPTY_COMMAND);
         }
 
-        String[] parts = input.split("\\s+", 2);
-        String commandWord = parts[0];
-        String args = (parts.length == 2) ? parts[1].trim() : "";
+        String[] commandParts = splitCommandWordAndArgs(input);
+        String commandWord = commandParts[0];
+        String args = commandParts[1];
 
         switch (commandWord) {
         case COMMAND_BYE:
@@ -97,6 +97,13 @@ public class Parser {
         default:
             throw new BobbyException(MESSAGE_INVALID_COMMAND);
         }
+    }
+
+    private static String[] splitCommandWordAndArgs(String input) {
+        String[] parts = input.split("\\s+", 2);
+        String commandWord = parts[0];
+        String args = (parts.length == 2) ? parts[1].trim() : "";
+        return new String[] { commandWord, args };
     }
 
     private static Command parseMark(String args) throws BobbyException {
