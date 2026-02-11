@@ -47,8 +47,7 @@ public class Parser {
     private static final String MESSAGE_TODO_EMPTY =
             "The description of a todo cannot be empty.";
     private static final String MESSAGE_FIND_USAGE =
-            "Please provide a keyword to find. Example: find book";
-
+            "Please provide one or more keywords to find. Example: find book return";
     private static final String MESSAGE_DEADLINE_USAGE =
             "Use: deadline <description> /by <yyyy-mm-dd>";
     private static final String MESSAGE_EVENT_USAGE =

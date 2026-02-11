@@ -75,21 +75,38 @@ public class TaskList {
     }
 
     /**
-     * Returns tasks whose descriptions contain the given keyword (case-insensitive).
+     * Returns tasks whose descriptions match any keyword in the query (case-insensitive).
+     * Keywords are split by whitespace. Partial matches are allowed.
      *
-     * @param keyword Keyword to search for.
+     * Example: "read book" matches tasks containing "read" or "book".
+     *
+     * @param query Query containing one or more keywords.
      * @return List of matching tasks. Empty list if none match.
      */
-    public List<Task> findByKeyword(String keyword) {
-        assert keyword != null : "keyword should not be null";
+    public List<Task> findByQuery(String query) {
+        assert query != null : "query should not be null";
 
-        String needle = keyword.trim().toLowerCase();
+        String trimmed = query.trim();
+        if (trimmed.isEmpty()) {
+            return List.of();
+        }
+
+        String[] needles = trimmed.toLowerCase().split("\\s+");
         List<Task> matches = new ArrayList<>();
 
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             String haystack = task.getDescription().toLowerCase();
-            if (haystack.contains(needle)) {
+
+            boolean isMatch = false;
+            for (int j = 0; j < needles.length; j++) {
+                if (haystack.contains(needles[j])) {
+                    isMatch = true;
+                    break;
+                }
+            }
+
+            if (isMatch) {
                 matches.add(task);
             }
         }

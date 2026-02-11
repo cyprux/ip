@@ -8,23 +8,23 @@ import bobby.task.TaskList;
 import bobby.ui.Ui;
 
 /**
- * Finds tasks that contain the given keyword in their description.
+ * Finds tasks that match the given find query.
  */
 public class FindTaskCommand extends Command {
-    private final String keyword;
+    private final String query;
 
     /**
-     * Creates a FindCommand with the keyword to search for.
+     * Creates a FindTaskCommand with the query to search for.
      *
-     * @param keyword Keyword used to match task descriptions.
+     * @param query Query containing one or more keywords.
      */
-    public FindTaskCommand(String keyword) {
-        this.keyword = keyword;
+    public FindTaskCommand(String query) {
+        this.query = query;
     }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
-        List<Task> matches = tasks.findByKeyword(keyword);
+        List<Task> matches = tasks.findByQuery(query);
         ui.showFoundTasks(matches);
     }
 }
