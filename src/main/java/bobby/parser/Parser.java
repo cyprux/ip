@@ -139,29 +139,12 @@ public class Parser {
     }
 
     private static Command parseEvent(String args) throws BobbyException {
-        String[] fromSplit = args.split(DELIMITER_FROM, 2);
-        if (fromSplit.length < 2) {
-            throw new BobbyException(MESSAGE_EVENT_USAGE);
-        }
+        String[] descriptionAndFrom = splitOnce(args, DELIMITER_FROM, MESSAGE_EVENT_USAGE);
+        String description = requireNonBlankTrimmed(descriptionAndFrom[0], MESSAGE_EVENT_USAGE);
 
-        String description = fromSplit[0].trim();
-        String timePart = fromSplit[1].trim();
-
-        if (description.isEmpty() || timePart.isEmpty()) {
-            throw new BobbyException(MESSAGE_EVENT_USAGE);
-        }
-
-        String[] toSplit = timePart.split(DELIMITER_TO, 2);
-        if (toSplit.length < 2) {
-            throw new BobbyException(MESSAGE_EVENT_USAGE);
-        }
-
-        String fromRaw = toSplit[0].trim();
-        String toRaw = toSplit[1].trim();
-
-        if (fromRaw.isEmpty() || toRaw.isEmpty()) {
-            throw new BobbyException(MESSAGE_EVENT_USAGE);
-        }
+        String[] fromAndTo = splitOnce(descriptionAndFrom[1], DELIMITER_TO, MESSAGE_EVENT_USAGE);
+        String fromRaw = requireNonBlankTrimmed(fromAndTo[0], MESSAGE_EVENT_USAGE);
+        String toRaw = requireNonBlankTrimmed(fromAndTo[1], MESSAGE_EVENT_USAGE);
 
         LocalDate from = DateTimeUtil.parseDate(fromRaw);
         LocalDate to = DateTimeUtil.parseDate(toRaw);
@@ -172,6 +155,27 @@ public class Parser {
     private static Command parseFind(String args) throws BobbyException {
         requireNonBlank(args, MESSAGE_FIND_USAGE);
         return new FindTaskCommand(args);
+    }
+
+    private static String[] splitOnce(String input, String delimiter, String usageMessage) throws BobbyException {
+        String[] parts = input.split(delimiter, 2);
+        if (parts.length < 2) {
+            throw new BobbyException(usageMessage);
+        }
+        return parts;
+    }
+
+    private static String requireNonBlankTrimmed(String raw, String usageMessage) throws BobbyException {
+        if (raw == null) {
+            throw new BobbyException(usageMessage);
+        }
+
+        String trimmed = raw.trim();
+        if (trimmed.isEmpty()) {
+            throw new BobbyException(usageMessage);
+        }
+
+        return trimmed;
     }
 
     private static void requireNonBlank(String value, String messageIfBlank) throws BobbyException {
