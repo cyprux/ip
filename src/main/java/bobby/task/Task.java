@@ -18,6 +18,9 @@ public class Task {
      * @param type The type of the task.
      */
     public Task(String description, TaskType type) {
+        assert description != null : "Task description should not be null";
+        assert type != null : "Task type should not be null";
+
         this.description = description;
         this.isDone = false;
         this.type = type;
@@ -31,6 +34,9 @@ public class Task {
      * @param isDone Whether the task is already marked as done.
      */
     public Task(String description, TaskType type, boolean isDone) {
+        assert description != null : "Task description should not be null";
+        assert type != null : "Task type should not be null";
+        
         this.description = description;
         this.isDone = isDone;
         this.type = type;
