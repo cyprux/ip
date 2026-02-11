@@ -40,24 +40,31 @@ public class Storage {
      * @throws BobbyException If the file cannot be read or contains corrupted data.
      */
     public ArrayList<Task> load() throws BobbyException {
-        ArrayList<Task> tasks = new ArrayList<>();
-
         if (!Files.exists(filePath)) {
-            return tasks;
+            return new ArrayList<>();
         }
 
         try {
-            List<String> lines = Files.readAllLines(filePath);
-            for (int i = 0; i < lines.size(); i++) {
-                String line = lines.get(i).trim();
-                if (!line.isEmpty()) {
-                    tasks.add(parseLine(line));
-                }
-            }
-            return tasks;
+            List<String> lines = readAllLines();
+            return parseTasks(lines);
         } catch (IOException e) {
             throw new BobbyException("Could not read saved tasks from disk.");
         }
+    }
+
+    private List<String> readAllLines() throws IOException {
+        return Files.readAllLines(filePath);
+    }
+
+    private ArrayList<Task> parseTasks(List<String> lines) throws BobbyException {
+        ArrayList<Task> tasks = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i).trim();
+            if (!line.isEmpty()) {
+                tasks.add(parseLine(line));
+            }
+        }
+        return tasks;
     }
 
     /**
@@ -95,37 +102,73 @@ public class Storage {
      * @throws BobbyException If the line format is invalid or corrupted.
      */
     private Task parseLine(String line) throws BobbyException {
+        String[] parts = splitStorageLine(line);
+        String typeIcon = getTypeIcon(parts, line);
+        boolean isDone = isDone(parts);
+        String description = getDescription(parts);
+
+        if (typeIcon.equals("T")) {
+            return parseTodo(description, isDone);
+        }
+
+        if (typeIcon.equals("D")) {
+            return parseDeadline(parts, description, isDone, line);
+        }
+
+        if (typeIcon.equals("E")) {
+            return parseEvent(parts, description, isDone, line);
+        }
+
+        throw new BobbyException("Unknown task type in save file: " + typeIcon);
+    }
+
+    private String[] splitStorageLine(String line) throws BobbyException {
         String[] parts = line.split("\\s*\\|\\s*");
         if (parts.length < 3) {
             throw new BobbyException("Corrupted save file line: " + line);
         }
+        return parts;
+    }
 
+    private String getTypeIcon(String[] parts, String originalLine) throws BobbyException {
         String typeIcon = parts[0].trim();
-        boolean isDone = parts[1].trim().equals("1");
-        String desc = parts[2].trim();
+        if (typeIcon.isEmpty()) {
+            throw new BobbyException("Unknown task type in save file: " + originalLine);
+        }
+        return typeIcon;
+    }
 
-        if (typeIcon.equals("T")) {
-            return new Todo(desc, isDone);
+    private boolean isDone(String[] parts) {
+        return parts[1].trim().equals("1");
+    }
+
+    private String getDescription(String[] parts) {
+        return parts[2].trim();
+    }
+
+    private Task parseTodo(String description, boolean isDone) {
+        return new Todo(description, isDone);
+    }
+
+    private Task parseDeadline(String[] parts, String description, boolean isDone, String originalLine)
+            throws BobbyException {
+        if (parts.length < 4) {
+            throw new BobbyException("Corrupted deadline line: " + originalLine);
         }
 
-        if (typeIcon.equals("D")) {
-            if (parts.length < 4) {
-                throw new BobbyException("Corrupted deadline line: " + line);
-            }
-            LocalDate by = DateTimeUtil.parseDate(parts[3].trim());
-            return new Deadline(desc, by, isDone);
+        LocalDate by = DateTimeUtil.parseDate(parts[3].trim());
+        return new Deadline(description, by, isDone);
+    }
+
+    private Task parseEvent(String[] parts, String description, boolean isDone, String originalLine)
+            throws BobbyException {
+        if (parts.length < 5) {
+            throw new BobbyException("Corrupted event line: " + originalLine);
         }
 
-        if (typeIcon.equals("E")) {
-            if (parts.length < 5) {
-                throw new BobbyException("Corrupted event line: " + line);
-            }
-            LocalDate from = DateTimeUtil.parseDate(parts[3].trim());
-            LocalDate to = DateTimeUtil.parseDate(parts[4].trim());
-            return new Event(desc, from, to, isDone);
-        }
-
-        throw new BobbyException("Unknown task type in save file: " + typeIcon);
+        LocalDate from = DateTimeUtil.parseDate(parts[3].trim());
+        LocalDate to = DateTimeUtil.parseDate(parts[4].trim());
+        return new Event(description, from, to, isDone);
     }
 
     /**
