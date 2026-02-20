@@ -78,7 +78,7 @@ public class TaskList {
      * Finds tasks whose description contains any keyword from the query.
      * Matching is case-insensitive and uses simple substring containment.
      * 
-     * Used ChatGPT to provide me suggestion to improve findByQuery method.
+     * Used ChatGPT to provide me suggestion to improve readability of findByQuery method.
      * Prompt suggested that I can split string extraction and matching.
      *
      * @param query The raw search query typed by the user.
