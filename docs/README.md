@@ -8,19 +8,35 @@ Bobby is designed for fast keyboard-based interaction — no mouse needed.
 
 ---
 
+## Getting Started
+
+### Generating the JAR File
+
+Bobby can be packaged into a runnable JAR file using Gradle.
+
+**Step 1.** Open a terminal in the project root directory.
+
+**Step 2.** Run: ./gradlew shadowJar
+
+**Step 3.** Locate the generated JAR file in: build/libs/bobby.jar
+
+**Step 4.** Run Bobby: java -jar bobby.jar
+
+---
+
 ## Features
 
 ### Adding a Todo
 
 Adds a basic task without any date or time.
 
-**Command Format:**
+**Command Format:**  
 `todo DESCRIPTION`
 
-**Example:**
+**Example:**  
 `todo Read CS2040S notes`
 
-**Expected Outcome:**
+**Expected Outcome:**  
 A new todo task is added to your list.
 
 ---
@@ -29,13 +45,13 @@ A new todo task is added to your list.
 
 Adds a task that must be completed by a specific date.
 
-**Command Format:**
+**Command Format:**  
 `deadline DESCRIPTION /by YYYY-MM-DD`
 
-**Example:**
+**Example:**  
 `deadline Submit assignment /by 2026-03-01`
 
-**Expected Outcome:**
+**Expected Outcome:**  
 A new deadline task is added with the specified due date.
 
 ---
@@ -44,13 +60,13 @@ A new deadline task is added with the specified due date.
 
 Adds a task that occurs within a time range.
 
-**Command Format:**
+**Command Format:**  
 `event DESCRIPTION /from YYYY-MM-DD /to YYYY-MM-DD`
 
-**Example:**
+**Example:**  
 `event Project meeting /from 2026-03-01 /to 2026-03-02`
 
-**Expected Outcome:**
+**Expected Outcome:**  
 A new event task is added with start and end dates.
 
 ---
@@ -59,7 +75,7 @@ A new event task is added with start and end dates.
 
 Displays all tasks currently stored.
 
-**Command Format:**
+**Command Format:**  
 `list`
 
 ---
@@ -68,10 +84,10 @@ Displays all tasks currently stored.
 
 Marks a task as completed.
 
-**Command Format:**
+**Command Format:**  
 `mark INDEX`
 
-**Example:**
+**Example:**  
 `mark 1`
 
 ---
@@ -80,10 +96,10 @@ Marks a task as completed.
 
 Marks a task as incomplete.
 
-**Command Format:**
+**Command Format:**  
 `unmark INDEX`
 
-**Example:**
+**Example:**  
 `unmark 1`
 
 ---
@@ -92,10 +108,10 @@ Marks a task as incomplete.
 
 Removes a task from the list.
 
-**Command Format:**
+**Command Format:**  
 `delete INDEX`
 
-**Example:**
+**Example:**  
 `delete 2`
 
 ---
@@ -104,10 +120,10 @@ Removes a task from the list.
 
 Finds tasks containing keywords.
 
-**Command Format:**
+**Command Format:**  
 `find KEYWORDS`
 
-**Example:**
+**Example:**  
 `find meeting`
 
 ---
@@ -116,7 +132,7 @@ Finds tasks containing keywords.
 
 Closes the application.
 
-**Command Format:**
+**Command Format:**  
 `bye`
 
 ---
