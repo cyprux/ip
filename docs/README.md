@@ -130,7 +130,7 @@ Finds tasks containing keywords.
 
 ### Exiting Bobby
 
-Closes the application.
+End the conversation with Bobby.
 
 **Command Format:**  
 `bye`
