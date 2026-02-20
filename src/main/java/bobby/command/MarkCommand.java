@@ -11,8 +11,7 @@ import bobby.ui.Ui;
  * After updating the task's status, the updated task list is saved and
  * the user interface is notified.
  */
-public class MarkCommand extends Command {
-    private final int index;
+public class MarkCommand extends IndexCommand {
 
     /**
      * Constructs a MarkCommand with the given task index.
@@ -20,7 +19,7 @@ public class MarkCommand extends Command {
      * @param index The index of the task to mark as done (0-based).
      */
     public MarkCommand(int index) {
-        this.index = index;
+        super(index);
     }
 
     /**
@@ -34,26 +33,12 @@ public class MarkCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws BobbyException {
-        ensureIndexInRange(index, tasks.size());
+        validateIndex(tasks);
         assert index >= 0 && index < tasks.size() : "Index should be valid after range check";
-        
+
         Task t = tasks.get(index);
         t.markAsDone();
         storage.save(tasks);
         ui.showTaskMarked(t);
-    }
-
-    /**
-     * Ensures that the provided index is within the valid range
-     * of the task list.
-     *
-     * @param index The index to check.
-     * @param size The current number of tasks.
-     * @throws BobbyException If the index is out of range.
-     */
-    private static void ensureIndexInRange(int index, int size) throws BobbyException {
-        if (index < 0 || index >= size) {
-            throw new BobbyException("That task number doesn't exist. Use 'list' to see the numbers.");
-        }
     }
 }
