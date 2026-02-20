@@ -11,8 +11,7 @@ import bobby.ui.Ui;
  * based on its index. After deletion, the updated task list is
  * saved and the user interface is informed.
  */
-public class DeleteCommand extends Command {
-    private final int index;
+public class DeleteCommand extends IndexCommand {
 
     /**
      * Constructs a DeleteCommand with the given task index.
@@ -20,7 +19,7 @@ public class DeleteCommand extends Command {
      * @param index The index of the task to delete (0-based).
      */
     public DeleteCommand(int index) {
-        this.index = index;
+        super(index);
     }
 
     /**
@@ -35,25 +34,11 @@ public class DeleteCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws BobbyException {
-        ensureIndexInRange(index, tasks.size());
+        validateIndex(tasks);
         assert index >= 0 && index < tasks.size() : "Index should be valid after range check";
-        
+
         Task removed = tasks.delete(index);
         storage.save(tasks);
         ui.showTaskDeleted(removed, tasks.size());
-    }
-
-    /**
-     * Ensures that the provided index is within the valid range
-     * of the task list.
-     *
-     * @param index The index to check.
-     * @param size The current number of tasks.
-     * @throws BobbyException If the index is out of range.
-     */
-    private static void ensureIndexInRange(int index, int size) throws BobbyException {
-        if (index < 0 || index >= size) {
-            throw new BobbyException("That task number doesn't exist. Use 'list' to see the numbers.");
-        }
     }
 }
